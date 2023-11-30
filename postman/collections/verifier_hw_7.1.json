@@ -14,16 +14,26 @@
 					"script": {
 						"id": "fe406eae-3643-4505-8b48-885672b1d26b",
 						"exec": [
-							"let jsonBody = pm.response.json();",
+							"let moment = require('moment');",
 							"",
+							"let currentTime = moment();",
+							"console.log(currentTime);",
+							"",
+							"pm.test(\"Response time is equal to current time\", function () {",
+							"  let responseHeaderDate = moment(pm.response.headers[Date]);",
+							"  console.log(responseHeaderDate);",
+							"  pm.expect(moment(responseHeaderDate).isAfter(currentTime)).to.be.true;",
+							"  ",
+							"  let jsonBody = pm.response.json();",
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
 							"});",
-							"",
 							"pm.test(\"Response body contains id_token\", function () {",
 							"    pm.expect(jsonBody).to.have.property(\"id_token\");",
 							"    pm.collectionVariables.set(\"id_token\", jsonBody.id_token);",
-							"});"
+							"});",
+							"});",
+							""
 						],
 						"type": "text/javascript"
 					}
